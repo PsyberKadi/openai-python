@@ -1,5 +1,333 @@
 # Changelog
 
+## [3.3.1](https://github.com/openai/openai-python/compare/v3.3.0...v3.3.1) (2026-08-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependencies with published security fixes ([#3680](https://github.com/openai/openai-python/issues/3680)) ([53aa4fc](https://github.com/openai/openai-python/commit/53aa4fc68b65f42456cafaaa5ff4b0d317184752))
+
+
+### Chores
+
+* **build:** migrate to uv ([#3653](https://github.com/openai/openai-python/issues/3653)) ([b37e85d](https://github.com/openai/openai-python/commit/b37e85d8fe9cd2b23862dbc62716d38e2cacaf92))
+* **deps:** remove jsonschema and unused fixture-validation dependencies ([0dfdfdd](https://github.com/openai/openai-python/commit/0dfdfdddfbeb591a1bb5b3b4aa62e4a9870fcaa6))
+* lock the repository Pyright toolchain ([#3678](https://github.com/openai/openai-python/issues/3678)) ([3079be2](https://github.com/openai/openai-python/commit/3079be224c05479b6cf8aa329480c249f66f0599))
+* run the mock server from locked local tooling ([#3679](https://github.com/openai/openai-python/issues/3679)) ([370fcc6](https://github.com/openai/openai-python/commit/370fcc60ce9006db5a75dcd0333790dfe71a907c))
+
+
+### Refactors
+
+* **deps:** use the standard library for platform detection ([d5b0065](https://github.com/openai/openai-python/commit/d5b00659d6659c5def665cb04e6563bdf683ea03))
+
+
+### Build System
+
+* replace the external README metadata hook ([e673ca8](https://github.com/openai/openai-python/commit/e673ca8ff9e5c2292615976e99bf5731d47327e8))
+
+## [3.3.0](https://github.com/openai/openai-python/compare/v3.2.0...v3.3.0) (2026-08-18)
+
+
+### Features
+
+* support named data-residency endpoints ([#3646](https://github.com/openai/openai-python/issues/3646)) ([11ee914](https://github.com/openai/openai-python/commit/11ee91475694d9cd77813763707fbadf68806d4f))
+
+
+### Bug Fixes
+
+* require patched optional networking dependencies ([#3651](https://github.com/openai/openai-python/issues/3651)) ([40e56de](https://github.com/openai/openai-python/commit/40e56de55166a55be3572fdf9750145d4458e144))
+
+
+### Chores
+
+* remove unused dependencies and pin build tooling ([#3650](https://github.com/openai/openai-python/issues/3650)) ([eee8e4a](https://github.com/openai/openai-python/commit/eee8e4a7d0e42bb0d6b9aa01c4dd8e04aaac3ff4))
+
+
+### Documentation
+
+* strengthen Python SDK security contribution guidance ([#3639](https://github.com/openai/openai-python/issues/3639)) ([6577709](https://github.com/openai/openai-python/commit/6577709190ae5e258d0270870f701432f67e6a3e))
+
+## [3.2.0](https://github.com/openai/openai-python/compare/v3.1.0...v3.2.0) (2026-08-17)
+
+
+### Features
+
+* add Bedrock Runtime endpoint support (SDK-290) ([#3623](https://github.com/openai/openai-python/issues/3623)) ([86267d2](https://github.com/openai/openai-python/commit/86267d2737e61e389e9260a18f99bcc1a634811b))
+* **api:** Add shell call streaming events and new service/image types ([#3635](https://github.com/openai/openai-python/issues/3635)) ([ff14a33](https://github.com/openai/openai-python/commit/ff14a33c1b21c36b9e43a0150a3818ee3aa3712a))
+
+## [3.1.0](https://github.com/openai/openai-python/compare/v3.0.0...v3.1.0) (2026-08-14)
+
+
+### Features
+
+* **api:** add WebSocket stream IDs ([#3612](https://github.com/openai/openai-python/issues/3612)) ([d9029e3](https://github.com/openai/openai-python/commit/d9029e3ada3c008b4631d78a425743445730892a))
+* **api:** add workload identity access token issued event ([#3601](https://github.com/openai/openai-python/issues/3601)) ([df274d4](https://github.com/openai/openai-python/commit/df274d44f5207febff3231f3a707f1d2265917b5))
+* **api:** deprecate Sora video APIs ([#3610](https://github.com/openai/openai-python/issues/3610)) ([721cb1c](https://github.com/openai/openai-python/commit/721cb1cd1cacb71237db4403d80a01403af61248))
+* **api:** Ultrafast tier, structured MCP and websocket errors, separate websocket events ([#3617](https://github.com/openai/openai-python/issues/3617)) ([f38355e](https://github.com/openai/openai-python/commit/f38355ecdf69b231be218e572f591ce7f389a211))
+
+
+### Chores
+
+* remove Stainless attribution and infrastructure ([#3599](https://github.com/openai/openai-python/issues/3599)) ([a1eeab5](https://github.com/openai/openai-python/commit/a1eeab58db02de46717ccebaf1eb83e314fa86ff))
+
+## [3.0.0](https://github.com/openai/openai-python/compare/v2.54.0...v3.0.0) (2026-08-12)
+
+
+### ⚠ BREAKING CHANGES
+
+* **api:** HTTPX2 is now the default HTTP client, and `httpx` is no longer installed automatically. Applications using custom HTTPX clients, transports, or configuration objects must migrate to their HTTPX2 equivalents or use the temporary, runtime-only legacy HTTPX escape hatch. See the [HTTPX2 migration guide](https://github.com/openai/openai-python/blob/main/httpx2.md).
+
+### Features
+
+* **api:** migrate to HTTPX2 ([#3594](https://github.com/openai/openai-python/pull/3594))
+
+## [2.54.0](https://github.com/openai/openai-python/compare/v2.53.0...v2.54.0) (2026-08-11)
+
+
+### Features
+
+* **api:** Add new Responses model identifiers ([#3595](https://github.com/openai/openai-python/issues/3595)) ([0652787](https://github.com/openai/openai-python/commit/06527878b8759ba52f28ab53e4d95a33989700d0))
+
+
+### Bug Fixes
+
+* **api:** clarify audio upload metadata requirements ([#3596](https://github.com/openai/openai-python/issues/3596)) ([28888f9](https://github.com/openai/openai-python/commit/28888f9cc1635dc1247c400a8054c836abc2c129))
+
+
+### Chores
+
+* **api:** Update generated-file header attribution to Castiron ([#3583](https://github.com/openai/openai-python/issues/3583)) ([ea17fda](https://github.com/openai/openai-python/commit/ea17fda01d7067a6d829effa437952a09f2bb3a3))
+
+## [2.53.0](https://github.com/openai/openai-python/compare/v2.52.1...v2.53.0) (2026-08-03)
+
+
+### Features
+
+* **api:** Add gpt-5.5 and tool name/namespace to Responses types ([#3569](https://github.com/openai/openai-python/issues/3569)) ([dd1202d](https://github.com/openai/openai-python/commit/dd1202d5dacff985861289c1d9c46996ded2d2a5))
+
+
+### Bug Fixes
+
+* **ci:** avoid NumPy source builds and duplicate HTTPX coverage ([#3573](https://github.com/openai/openai-python/issues/3573)) ([b58332f](https://github.com/openai/openai-python/commit/b58332f8a0717f7b1effb1788a594011cee6e02f))
+
+## 2.52.1 (2026-07-31)
+
+Full Changelog: [v2.52.0...v2.52.1](https://github.com/openai/openai-python/compare/v2.52.0...v2.52.1)
+
+### Chores
+
+* **ci:** pin setup-uv v5 to its underlying commit ([#3560](https://github.com/openai/openai-python/issues/3560)) ([cbdc98b](https://github.com/openai/openai-python/commit/cbdc98b6c1e21df7ee43d13b5de7243c6ed1ee7f))
+
+## 2.52.0 (2026-07-31)
+
+Full Changelog: [v2.51.0...v2.52.0](https://github.com/openai/openai-python/compare/v2.51.0...v2.52.0)
+
+### Features
+
+* **api:** content provenance checks ([1d6c118](https://github.com/openai/openai-python/commit/1d6c1180f8eaa71bfd45cae67360987b2bea3656))
+
+
+### Bug Fixes
+
+* **client:** honor Retry-After delays up to two minutes ([#3555](https://github.com/openai/openai-python/issues/3555)) ([7fa7946](https://github.com/openai/openai-python/commit/7fa7946485b5ecbadd0ebf8624c574e2c9e3370c))
+
+
+### Documentation
+
+* add API-key mTLS HTTP client recipes ([#3552](https://github.com/openai/openai-python/issues/3552)) ([7a3d5e4](https://github.com/openai/openai-python/commit/7a3d5e46b61cb36109dc4e7fd6d4ab70cc6d6c0f))
+
+## 2.51.0 (2026-07-30)
+
+Full Changelog: [v2.50.0...v2.51.0](https://github.com/openai/openai-python/compare/v2.50.0...v2.51.0)
+
+### Features
+
+* **api:** fast tier ([8808ed2](https://github.com/openai/openai-python/commit/8808ed27952dae13fb8761f045376af5b3e5bec2))
+
+
+### Bug Fixes
+
+* **api:** add fast tier to helper methods ([6064126](https://github.com/openai/openai-python/commit/60641266ff4b296044a81fe1717c17a70ceadbf1))
+
+## 2.50.0 (2026-07-28)
+
+Full Changelog: [v2.49.0...v2.50.0](https://github.com/openai/openai-python/compare/v2.49.0...v2.50.0)
+
+### Features
+
+* **api:** transcription model updates ([fd57393](https://github.com/openai/openai-python/commit/fd57393389eac75af08c2e887cb188590448be20))
+
+
+### Bug Fixes
+
+* **audio:** restore transcription keyword overload ([713a262](https://github.com/openai/openai-python/commit/713a2624966c40f4e5b0c20436b8a79aa8383b08))
+
+## 2.49.0 (2026-07-27)
+
+Full Changelog: [v2.48.0...v2.49.0](https://github.com/openai/openai-python/compare/v2.48.0...v2.49.0)
+
+### Features
+
+* require Python 3.10 and automate version reviews ([#3537](https://github.com/openai/openai-python/issues/3537)) ([d4c151d](https://github.com/openai/openai-python/commit/d4c151d92ba713e56518a4483d3b7918dd1be838))
+
+## 2.48.0 (2026-07-23)
+
+Full Changelog: [v2.47.0...v2.48.0](https://github.com/openai/openai-python/compare/v2.47.0...v2.48.0)
+
+### Features
+
+* **api:** accept `None` for prompt_cache_key/safety_identifier ([36820e6](https://github.com/openai/openai-python/commit/36820e69ba6cf1dc3f8d411e48a36e56084fbbc4))
+* **api:** add support for `spend_limit` admin apis ([1ff13af](https://github.com/openai/openai-python/commit/1ff13afb6e831394036686a1c352bbec6d704c68))
+
+## 2.47.0 (2026-07-21)
+
+Full Changelog: [v2.46.0...v2.47.0](https://github.com/openai/openai-python/compare/v2.46.0...v2.47.0)
+
+### Features
+
+* **client:** Add experimental runtime support for HTTPX2 clients ([#3524](https://github.com/openai/openai-python/issues/3524)) ([317260c](https://github.com/openai/openai-python/commit/317260cd16395b2338bcdaacd7daa0b179c90105))
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([4303e97](https://github.com/openai/openai-python/commit/4303e974f08394789c6075b6745357b2f1c36e21))
+
+
+### Bug Fixes
+
+* **deps:** require patched aiohttp on Python 3.10+ ([#3515](https://github.com/openai/openai-python/issues/3515)) ([d4dceb2](https://github.com/openai/openai-python/commit/d4dceb221b9a92c55c232d5b330ae89beb539415))
+
+## 2.46.0 (2026-07-17)
+
+Full Changelog: [v2.45.0...v2.46.0](https://github.com/openai/openai-python/compare/v2.45.0...v2.46.0)
+
+### Features
+
+* **api:** /organization/projects/{project_id}/service_accounts/{service_account_id}/api_keys" endpoint ([5a00941](https://github.com/openai/openai-python/commit/5a0094194eac9c605c8ca84d47d1c5518f8e2131))
+* **api:** add owner_project_access to APIKeyListParams ([f589d04](https://github.com/openai/openai-python/commit/f589d04bf9f377ecb1f54335ab3ab9d825b5dfee))
+* **api:** manual updates ([980f176](https://github.com/openai/openai-python/commit/980f176e83ee5d991bf9e8e4def80d9905ade5ec))
+* **api:** manual updates ([2eae984](https://github.com/openai/openai-python/commit/2eae984315580cdbf9ceb14d6cb568c581baa768))
+
+
+### Bug Fixes
+
+* **api:** preserve generated type compatibility ([00bd72a](https://github.com/openai/openai-python/commit/00bd72adbe03f4b5c4b89d91b8d317f11b58bbdf))
+* **api:** remove beta annotation compatibility aliases ([99dbd15](https://github.com/openai/openai-python/commit/99dbd15ff3ad1628b94a729a6b688212d4655908))
+
+## 2.45.0 (2026-07-09)
+
+Full Changelog: [v2.44.0...v2.45.0](https://github.com/openai/openai-python/compare/v2.44.0...v2.45.0)
+
+### Features
+
+* **api:** gpt-5.6-sol updates ([039d1fe](https://github.com/openai/openai-python/commit/039d1feb264a2dca7195ba5028e9fb47a5e04987))
+
+
+### Bug Fixes
+
+* **api:** restore beta resource accessors ([2dfc130](https://github.com/openai/openai-python/commit/2dfc130b8f0fdb0049e075aac21aaef29482b4e3))
+
+
+### Chores
+
+* retrigger release automation ([7b61351](https://github.com/openai/openai-python/commit/7b61351b014bb6ca4623ff6cce7f32f45038a92e))
+
+## 2.44.0 (2026-06-24)
+
+Full Changelog: [v2.43.0...v2.44.0](https://github.com/openai/openai-python/compare/v2.43.0...v2.44.0)
+
+### Bug Fixes
+
+* **auth:** prioritize first auth header ([797e336](https://github.com/openai/openai-python/commit/797e3362e222ae14e587a4543b76a54d8992d66c))
+
+## 2.43.0 (2026-06-17)
+
+Full Changelog: [v2.42.0...v2.43.0](https://github.com/openai/openai-python/compare/v2.42.0...v2.43.0)
+
+### Features
+
+* **api:** update OpenAPI spec or Stainless config ([2254235](https://github.com/openai/openai-python/commit/22542358490ef8f31f0d373e17f7b791b3d983ca))
+
+## 2.42.0 (2026-06-16)
+
+Full Changelog: [v2.41.1...v2.42.0](https://github.com/openai/openai-python/compare/v2.41.1...v2.42.0)
+
+### Features
+
+* **api:** admin spend_alerts ([6134198](https://github.com/openai/openai-python/commit/6134198a488996c4ff6fca4551afd55fb3294fdc))
+* **api:** manual updates ([f337bf4](https://github.com/openai/openai-python/commit/f337bf43276c880d2daf09a5d7f9fc9a886c4bf2))
+* **api:** update OpenAPI spec or Stainless config ([7015158](https://github.com/openai/openai-python/commit/7015158c3119acf57af6c20903587cef928530a9))
+
+
+### Build System
+
+* fix release workflow permissions ([#3389](https://github.com/openai/openai-python/issues/3389)) ([a526ee8](https://github.com/openai/openai-python/commit/a526ee813f085318fe3c6923ac3fa10c1cf56420))
+* Use CI environment for examples API key ([#3394](https://github.com/openai/openai-python/issues/3394)) ([d64d811](https://github.com/openai/openai-python/commit/d64d811e82aff724397e32d593e50657fee3f905))
+
+## 2.41.1 (2026-06-05)
+
+Full Changelog: [v2.41.0...v2.41.1](https://github.com/openai/openai-python/compare/v2.41.0...v2.41.1)
+
+### Build System
+
+* Remove scheduled release workflow trigger ([#3366](https://github.com/openai/openai-python/issues/3366)) ([2a91011](https://github.com/openai/openai-python/commit/2a91011abc21032db9566b98068afefb5fbb9b24))
+
+## 2.41.0 (2026-06-03)
+
+Full Changelog: [v2.40.0...v2.41.0](https://github.com/openai/openai-python/compare/v2.40.0...v2.41.0)
+
+### Features
+
+* **api:** responses.moderation and chat_completions.moderation ([87e46c2](https://github.com/openai/openai-python/commit/87e46c25ac9ca8cff407b52ad9fb33e326c059d6))
+
+## 2.40.0 (2026-06-01)
+
+Full Changelog: [v2.39.0...v2.40.0](https://github.com/openai/openai-python/compare/v2.39.0...v2.40.0)
+
+### Features
+* **api:** Add Amazon Bedrock Responses support
+
+### Bug Fixes
+
+* **api:** allow setting bedrock api keys on the client directly ([4d5bfde](https://github.com/openai/openai-python/commit/4d5bfdec37fa8a2b2a0413724755e586e627e28d))
+
+## 2.39.0 (2026-06-01)
+
+Full Changelog: [v2.38.0...v2.39.0](https://github.com/openai/openai-python/compare/v2.38.0...v2.39.0)
+
+### Features
+
+* **api:** workload identity in audit logs, additional_tools item in responses, fix ActionSearch.query to be optional. ([ab60d7a](https://github.com/openai/openai-python/commit/ab60d7a52c310bb0490ff36b8bdc33b8d4ea725f))
+
+## 2.38.0 (2026-05-21)
+
+Full Changelog: [v2.37.0...v2.38.0](https://github.com/openai/openai-python/compare/v2.37.0...v2.38.0)
+
+### Features
+
+* **api:** api update ([33d1d01](https://github.com/openai/openai-python/commit/33d1d013250053886a73d178136e6bd1b09df059))
+* **api:** manual updates ([a21700a](https://github.com/openai/openai-python/commit/a21700a2cd510cb9e6c88065ac8e942d4c041aa8))
+* **api:** update OpenAPI spec or Stainless config ([00265c5](https://github.com/openai/openai-python/commit/00265c5daba4d2481452ad35220f1556dab6bcf6))
+
+
+### Chores
+
+* **api:** docs updates ([ee10152](https://github.com/openai/openai-python/commit/ee101520d49e22c09cf8096f8cbb3848ea58a1f9))
+* check release PR custom code sync ([2638779](https://github.com/openai/openai-python/commit/2638779a5b8fffaa8fdb6eebc1d734f15d2491f8))
+* remove release automation trigger ([bd6eea5](https://github.com/openai/openai-python/commit/bd6eea559f2996d914258a65e645981bdce3cad4))
+* trigger release automation ([f62d082](https://github.com/openai/openai-python/commit/f62d08201eea8e08d4bb3385662f934d4adccb29))
+
+## 2.37.0 (2026-05-13)
+
+Full Changelog: [v2.36.0...v2.37.0](https://github.com/openai/openai-python/compare/v2.36.0...v2.37.0)
+
+### Features
+
+* **api:** add service_tier parameter to responses compact method ([625827c](https://github.com/openai/openai-python/commit/625827c5509ece3c40e5002be37a9bd9d91b5374))
+* **internal/types:** support eagerly validating pydantic iterators ([7e527bc](https://github.com/openai/openai-python/commit/7e527bc927cc58b74d7619abf7f1fbcfff8bddfa))
+* Remove unnecessary client_id when using workload identity provider for auth ([c39ea8d](https://github.com/openai/openai-python/commit/c39ea8d12a010052d7f02cebe8daabd2d1f89597))
+
+
+### Bug Fixes
+
+* **client:** add missing f-string prefix in file type error message ([c85ebd9](https://github.com/openai/openai-python/commit/c85ebd935cb4b80e7e97ce255437684f6411fb00))
+
 ## 2.36.0 (2026-05-07)
 
 Full Changelog: [v2.35.1...v2.36.0](https://github.com/openai/openai-python/compare/v2.35.1...v2.36.0)

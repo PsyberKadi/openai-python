@@ -1,4 +1,4 @@
-# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+# File generated from our OpenAPI spec by Castiron. See CONTRIBUTING.md for details.
 
 from typing import Dict, List, Union, Optional
 from typing_extensions import Literal, Annotated, TypeAlias
@@ -34,6 +34,7 @@ __all__ = [
     "CodeInterpreterContainer",
     "CodeInterpreterContainerCodeInterpreterToolAuto",
     "CodeInterpreterContainerCodeInterpreterToolAutoNetworkPolicy",
+    "ProgrammaticToolCalling",
     "ImageGeneration",
     "ImageGenerationInputImageMask",
     "LocalShell",
@@ -121,6 +122,9 @@ class Mcp(BaseModel):
     type: Literal["mcp"]
     """The type of the MCP tool. Always `mcp`."""
 
+    allowed_callers: Optional[List[Literal["direct", "programmatic"]]] = None
+    """The tool invocation context(s)."""
+
     allowed_tools: Optional[McpAllowedTools] = None
     """List of allowed tool names or a filter object."""
 
@@ -145,8 +149,8 @@ class Mcp(BaseModel):
     ] = None
     """Identifier for service connectors, like those available in ChatGPT.
 
-    One of `server_url` or `connector_id` must be provided. Learn more about service
-    connectors
+    One of `server_url`, `connector_id`, or `tunnel_id` must be provided. Learn more
+    about service connectors
     [here](https://platform.openai.com/docs/guides/tools-remote-mcp#connectors).
 
     Currently supported `connector_id` values are:
@@ -179,7 +183,13 @@ class Mcp(BaseModel):
     server_url: Optional[str] = None
     """The URL for the MCP server.
 
-    One of `server_url` or `connector_id` must be provided.
+    One of `server_url`, `connector_id`, or `tunnel_id` must be provided.
+    """
+
+    tunnel_id: Optional[str] = None
+    """The Secure MCP Tunnel ID to use instead of a direct server URL.
+
+    One of `server_url`, `connector_id`, or `tunnel_id` must be provided.
     """
 
 
@@ -223,6 +233,14 @@ class CodeInterpreter(BaseModel):
     type: Literal["code_interpreter"]
     """The type of the code interpreter tool. Always `code_interpreter`."""
 
+    allowed_callers: Optional[List[Literal["direct", "programmatic"]]] = None
+    """The tool invocation context(s)."""
+
+
+class ProgrammaticToolCalling(BaseModel):
+    type: Literal["programmatic_tool_calling"]
+    """The type of the tool. Always `programmatic_tool_calling`."""
+
 
 class ImageGenerationInputImageMask(BaseModel):
     """Optional mask for inpainting.
@@ -249,18 +267,13 @@ class ImageGeneration(BaseModel):
 
     background: Optional[Literal["transparent", "opaque", "auto"]] = None
     """
-    Allows to set transparency for the background of the generated image(s). This
-    parameter is only supported for GPT image models that support transparent
-    backgrounds. Must be one of `transparent`, `opaque`, or `auto` (default value).
-    When `auto` is used, the model will automatically determine the best background
-    for the image.
+    Allows to set transparency for the background of the generated image(s). Must be
+    one of `transparent`, `opaque`, or `auto` (default value). When `auto` is used,
+    the model will automatically determine the best background for the image.
 
-    `gpt-image-2` and `gpt-image-2-2026-04-21` do not support transparent
-    backgrounds. Requests with `background` set to `transparent` will return an
-    error for these models; use `opaque` or `auto` instead.
-
-    If `transparent`, the output format needs to support transparency, so it should
-    be set to either `png` (default value) or `webp`.
+    Transparent backgrounds are available for supported GPT Image models. For
+    `gpt-image-2` and `gpt-image-2-2026-04-21`, this support is in preview. When
+    using `transparent`, set the output format to `png` or `webp`.
     """
 
     input_fidelity: Optional[Literal["high", "low"]] = None
@@ -289,7 +302,11 @@ class ImageGeneration(BaseModel):
         ],
         None,
     ] = None
-    """The image generation model to use. Default: `gpt-image-1`."""
+    """The image generation model to use.
+
+    One of `gpt-image-1`, `gpt-image-1-mini`, `gpt-image-1.5`, `gpt-image-2`,
+    `gpt-image-2-2026-04-21`, or `chatgpt-image-latest`. Default: `gpt-image-1`.
+    """
 
     moderation: Optional[Literal["auto", "low"]] = None
     """Moderation level for the generated image. Default: `auto`."""
@@ -347,6 +364,7 @@ Tool: TypeAlias = Annotated[
         WebSearchTool,
         Mcp,
         CodeInterpreter,
+        ProgrammaticToolCalling,
         ImageGeneration,
         LocalShell,
         FunctionShellTool,

@@ -4,71 +4,79 @@ on:
     branches:
       - main
       - next
+  merge_group:
+    types:
+      - checks_requested
+
+permissions:
+  contents: read
 
 jobs:
   detect_breaking_changes:
     runs-on: 'ubuntu-latest'
     name: detect-breaking-changes
-    if: github.repository == 'openai/openai-python'
+    if: github.repository == 'openai/openai-python' && (github.event_name == 'pull_request' || github.event_name == 'merge_group')
+    env:
+      BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.merge_group.base_sha }}
     steps:
-      - name: Calculate fetch-depth
-        run: |
-          echo "FETCH_DEPTH=$(expr ${{ github.event.pull_request.commits }} + 1)" >> $GITHUB_ENV
-
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
-          # Ensure we can check out the pull request base in the script below.
-          fetch-depth: ${{ env.FETCH_DEPTH }}
+          persist-credentials: false
+          fetch-depth: 1
 
-      - name: Set up Rye
-        uses: eifinger/setup-rye@c694239a43768373e87d0103d7f547027a23f3c8
+      - name: Fetch comparison base
+        run: git fetch --no-tags --depth=1 origin "$BASE_SHA"
+
+      - uses: ./.github/actions/setup-node-tooling
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
         with:
-          version: '0.44.0'
+          version: '0.12.5'
           enable-cache: true
       - name: Install dependencies
         run: |
-          rye sync --all-features
+          uv sync --locked --all-extras
       - name: Detect removed symbols
         run: |
-          rye run python scripts/detect-breaking-changes.py "${{ github.event.pull_request.base.sha }}"
+          uv run --locked --all-extras python scripts/detect-breaking-changes.py "$BASE_SHA"
 
       - name: Detect breaking changes
         run: |
           test -f ./scripts/detect-breaking-changes || { echo "Missing scripts/detect-breaking-changes"; exit 1; }
-          ./scripts/detect-breaking-changes ${{ github.event.pull_request.base.sha }}
+          ./scripts/detect-breaking-changes "$BASE_SHA"
 
   agents_sdk:
     runs-on: 'ubuntu-latest'
     name: Detect Agents SDK regressions
-    if: github.repository == 'openai/openai-python'
+    if: github.repository == 'openai/openai-python' && github.event_name == 'pull_request'
     steps:
       # Setup this sdk
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
+          persist-credentials: false
           path: openai-python
 
-      - name: Set up Rye
-        uses: eifinger/setup-rye@c694239a43768373e87d0103d7f547027a23f3c8
+      - name: Set up uv
+        uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
         with:
-          version: '0.44.0'
+          version: '0.12.5'
           enable-cache: true
           working-directory: openai-python
+          # Match the Agents SDK's type-checking runtime, not our minimum.
+          python-version: '3.14'
 
       - name: Install dependencies
         working-directory: openai-python
         run: |
-          rye sync --all-features
+          uv sync --locked --all-extras
 
       # Setup the agents lib
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
+          persist-credentials: false
           repository: openai/openai-agents-python
           path: openai-agents-python
-
-      - name: Setup uv
-        uses: astral-sh/setup-uv@e58605a9b6da7c637471fab8847a5e5a6b8df081 # v5
-        with:
-          enable-cache: true
 
       - name: Link to local SDK
         working-directory: openai-agents-python

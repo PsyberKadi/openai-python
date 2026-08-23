@@ -1,4 +1,4 @@
-# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+# File generated from our OpenAPI spec by Castiron. See CONTRIBUTING.md for details.
 
 from __future__ import annotations
 
@@ -6,7 +6,6 @@ import os
 from typing import Any, cast
 
 import pytest
-import pydantic
 
 from openai import OpenAI, AsyncOpenAI
 from tests.utils import assert_matches_type
@@ -65,6 +64,13 @@ class TestCompletions:
             max_tokens=0,
             metadata={"foo": "string"},
             modalities=["text"],
+            moderation={
+                "model": "model",
+                "policy": {
+                    "input": {"mode": "score"},
+                    "output": {"mode": "score"},
+                },
+            },
             n=1,
             parallel_tool_calls=True,
             prediction={
@@ -73,6 +79,10 @@ class TestCompletions:
             },
             presence_penalty=-2,
             prompt_cache_key="prompt-cache-key-1234",
+            prompt_cache_options={
+                "mode": "implicit",
+                "ttl": "30m",
+            },
             prompt_cache_retention="in_memory",
             reasoning_effort="none",
             response_format={"type": "text"},
@@ -199,6 +209,13 @@ class TestCompletions:
             max_tokens=0,
             metadata={"foo": "string"},
             modalities=["text"],
+            moderation={
+                "model": "model",
+                "policy": {
+                    "input": {"mode": "score"},
+                    "output": {"mode": "score"},
+                },
+            },
             n=1,
             parallel_tool_calls=True,
             prediction={
@@ -207,6 +224,10 @@ class TestCompletions:
             },
             presence_penalty=-2,
             prompt_cache_key="prompt-cache-key-1234",
+            prompt_cache_options={
+                "mode": "implicit",
+                "ttl": "30m",
+            },
             prompt_cache_retention="in_memory",
             reasoning_effort="none",
             response_format={"type": "text"},
@@ -442,23 +463,6 @@ class TestCompletions:
                 "",
             )
 
-    @parametrize
-    def test_method_create_disallows_pydantic(self, client: OpenAI) -> None:
-        class MyModel(pydantic.BaseModel):
-            a: str
-
-        with pytest.raises(TypeError, match=r"You tried to pass a `BaseModel` class"):
-            client.chat.completions.create(
-                messages=[
-                    {
-                        "content": "string",
-                        "role": "system",
-                    }
-                ],
-                model="gpt-4o",
-                response_format=cast(Any, MyModel),
-            )
-
 
 class TestAsyncCompletions:
     parametrize = pytest.mark.parametrize(
@@ -508,6 +512,13 @@ class TestAsyncCompletions:
             max_tokens=0,
             metadata={"foo": "string"},
             modalities=["text"],
+            moderation={
+                "model": "model",
+                "policy": {
+                    "input": {"mode": "score"},
+                    "output": {"mode": "score"},
+                },
+            },
             n=1,
             parallel_tool_calls=True,
             prediction={
@@ -516,6 +527,10 @@ class TestAsyncCompletions:
             },
             presence_penalty=-2,
             prompt_cache_key="prompt-cache-key-1234",
+            prompt_cache_options={
+                "mode": "implicit",
+                "ttl": "30m",
+            },
             prompt_cache_retention="in_memory",
             reasoning_effort="none",
             response_format={"type": "text"},
@@ -642,6 +657,13 @@ class TestAsyncCompletions:
             max_tokens=0,
             metadata={"foo": "string"},
             modalities=["text"],
+            moderation={
+                "model": "model",
+                "policy": {
+                    "input": {"mode": "score"},
+                    "output": {"mode": "score"},
+                },
+            },
             n=1,
             parallel_tool_calls=True,
             prediction={
@@ -650,6 +672,10 @@ class TestAsyncCompletions:
             },
             presence_penalty=-2,
             prompt_cache_key="prompt-cache-key-1234",
+            prompt_cache_options={
+                "mode": "implicit",
+                "ttl": "30m",
+            },
             prompt_cache_retention="in_memory",
             reasoning_effort="none",
             response_format={"type": "text"},
@@ -883,21 +909,4 @@ class TestAsyncCompletions:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `completion_id` but received ''"):
             await async_client.chat.completions.with_raw_response.delete(
                 "",
-            )
-
-    @parametrize
-    async def test_method_create_disallows_pydantic(self, async_client: AsyncOpenAI) -> None:
-        class MyModel(pydantic.BaseModel):
-            a: str
-
-        with pytest.raises(TypeError, match=r"You tried to pass a `BaseModel` class"):
-            await async_client.chat.completions.create(
-                messages=[
-                    {
-                        "content": "string",
-                        "role": "system",
-                    }
-                ],
-                model="gpt-4o",
-                response_format=cast(Any, MyModel),
             )
