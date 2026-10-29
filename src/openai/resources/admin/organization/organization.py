@@ -68,6 +68,14 @@ from .spend_alerts import (
     SpendAlertsWithStreamingResponse,
     AsyncSpendAlertsWithStreamingResponse,
 )
+from .external_keys import (
+    ExternalKeys,
+    AsyncExternalKeys,
+    ExternalKeysWithRawResponse,
+    AsyncExternalKeysWithRawResponse,
+    ExternalKeysWithStreamingResponse,
+    AsyncExternalKeysWithStreamingResponse,
+)
 from .groups.groups import (
     Groups,
     AsyncGroups,
@@ -91,6 +99,14 @@ from .data_retention import (
     AsyncDataRetentionWithRawResponse,
     DataRetentionWithStreamingResponse,
     AsyncDataRetentionWithStreamingResponse,
+)
+from .external_storage import (
+    ExternalStorage,
+    AsyncExternalStorage,
+    ExternalStorageWithRawResponse,
+    AsyncExternalStorageWithRawResponse,
+    ExternalStorageWithStreamingResponse,
+    AsyncExternalStorageWithStreamingResponse,
 )
 from .projects.projects import (
     Projects,
@@ -139,6 +155,10 @@ class Organization(SyncAPIResource):
         return DataRetention(self._client)
 
     @cached_property
+    def external_storage(self) -> ExternalStorage:
+        return ExternalStorage(self._client)
+
+    @cached_property
     def spend_limit(self) -> SpendLimit:
         return SpendLimit(self._client)
 
@@ -153,6 +173,10 @@ class Organization(SyncAPIResource):
     @cached_property
     def projects(self) -> Projects:
         return Projects(self._client)
+
+    @cached_property
+    def external_keys(self) -> ExternalKeys:
+        return ExternalKeys(self._client)
 
     @cached_property
     def with_raw_response(self) -> OrganizationWithRawResponse:
@@ -209,6 +233,10 @@ class AsyncOrganization(AsyncAPIResource):
         return AsyncDataRetention(self._client)
 
     @cached_property
+    def external_storage(self) -> AsyncExternalStorage:
+        return AsyncExternalStorage(self._client)
+
+    @cached_property
     def spend_limit(self) -> AsyncSpendLimit:
         return AsyncSpendLimit(self._client)
 
@@ -223,6 +251,10 @@ class AsyncOrganization(AsyncAPIResource):
     @cached_property
     def projects(self) -> AsyncProjects:
         return AsyncProjects(self._client)
+
+    @cached_property
+    def external_keys(self) -> AsyncExternalKeys:
+        return AsyncExternalKeys(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncOrganizationWithRawResponse:
@@ -282,6 +314,10 @@ class OrganizationWithRawResponse:
         return DataRetentionWithRawResponse(self._organization.data_retention)
 
     @cached_property
+    def external_storage(self) -> ExternalStorageWithRawResponse:
+        return ExternalStorageWithRawResponse(self._organization.external_storage)
+
+    @cached_property
     def spend_limit(self) -> SpendLimitWithRawResponse:
         return SpendLimitWithRawResponse(self._organization.spend_limit)
 
@@ -296,6 +332,10 @@ class OrganizationWithRawResponse:
     @cached_property
     def projects(self) -> ProjectsWithRawResponse:
         return ProjectsWithRawResponse(self._organization.projects)
+
+    @cached_property
+    def external_keys(self) -> ExternalKeysWithRawResponse:
+        return ExternalKeysWithRawResponse(self._organization.external_keys)
 
 
 class AsyncOrganizationWithRawResponse:
@@ -336,6 +376,10 @@ class AsyncOrganizationWithRawResponse:
         return AsyncDataRetentionWithRawResponse(self._organization.data_retention)
 
     @cached_property
+    def external_storage(self) -> AsyncExternalStorageWithRawResponse:
+        return AsyncExternalStorageWithRawResponse(self._organization.external_storage)
+
+    @cached_property
     def spend_limit(self) -> AsyncSpendLimitWithRawResponse:
         return AsyncSpendLimitWithRawResponse(self._organization.spend_limit)
 
@@ -350,6 +394,10 @@ class AsyncOrganizationWithRawResponse:
     @cached_property
     def projects(self) -> AsyncProjectsWithRawResponse:
         return AsyncProjectsWithRawResponse(self._organization.projects)
+
+    @cached_property
+    def external_keys(self) -> AsyncExternalKeysWithRawResponse:
+        return AsyncExternalKeysWithRawResponse(self._organization.external_keys)
 
 
 class OrganizationWithStreamingResponse:
@@ -390,6 +438,10 @@ class OrganizationWithStreamingResponse:
         return DataRetentionWithStreamingResponse(self._organization.data_retention)
 
     @cached_property
+    def external_storage(self) -> ExternalStorageWithStreamingResponse:
+        return ExternalStorageWithStreamingResponse(self._organization.external_storage)
+
+    @cached_property
     def spend_limit(self) -> SpendLimitWithStreamingResponse:
         return SpendLimitWithStreamingResponse(self._organization.spend_limit)
 
@@ -404,6 +456,10 @@ class OrganizationWithStreamingResponse:
     @cached_property
     def projects(self) -> ProjectsWithStreamingResponse:
         return ProjectsWithStreamingResponse(self._organization.projects)
+
+    @cached_property
+    def external_keys(self) -> ExternalKeysWithStreamingResponse:
+        return ExternalKeysWithStreamingResponse(self._organization.external_keys)
 
 
 class AsyncOrganizationWithStreamingResponse:
@@ -444,6 +500,10 @@ class AsyncOrganizationWithStreamingResponse:
         return AsyncDataRetentionWithStreamingResponse(self._organization.data_retention)
 
     @cached_property
+    def external_storage(self) -> AsyncExternalStorageWithStreamingResponse:
+        return AsyncExternalStorageWithStreamingResponse(self._organization.external_storage)
+
+    @cached_property
     def spend_limit(self) -> AsyncSpendLimitWithStreamingResponse:
         return AsyncSpendLimitWithStreamingResponse(self._organization.spend_limit)
 
@@ -458,3 +518,7 @@ class AsyncOrganizationWithStreamingResponse:
     @cached_property
     def projects(self) -> AsyncProjectsWithStreamingResponse:
         return AsyncProjectsWithStreamingResponse(self._organization.projects)
+
+    @cached_property
+    def external_keys(self) -> AsyncExternalKeysWithStreamingResponse:
+        return AsyncExternalKeysWithStreamingResponse(self._organization.external_keys)

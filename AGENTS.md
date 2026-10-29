@@ -7,15 +7,21 @@ changing generated files. Handwritten policy, automation, tests, and examples
 should remain small and should not alter exported SDK APIs unless the change
 explicitly requires it.
 
-## Custom-code budget
+## Generated-file ownership
 
-Follow [the custom-code guidance](scripts/castiron/CUSTOM_CODE.md). Budget changes
-belong in a separate PR containing only `.castiron-ratchet.json`, with an explicit justification
-in the PR description. Increases require a **human approving review** before merging.
-Agents may investigate and draft proposals, but must not approve budget increases
-(including through a human's credentials) or bypass the gate. Do not weaken
-counting, broaden exclusions, or alter generation metadata to make a change pass.
-The checker and effective budget come from main, not the PR. Keep default CODEOWNERS.
+Never hand-edit generated SDK files, including generated tests, documentation,
+workflows, or the generated-file inventory. Change the authoritative API schema,
+configuration, or compiler, then regenerate. Put SDK-specific behavior in
+separately owned handwritten helpers and extension points.
+
+Regeneration replaces generator-owned files and deletes retired generated paths.
+Handwritten edits to generated files are overwritten; they are never replayed or
+merged into new output. Preserve separately owned handwritten files and resolve
+ownership collisions explicitly. Follow this AGENTS.md rule and review generated output and inventory changes
+together. Generated-file ownership currently relies on contributor guidance and
+code review; there is no dedicated generated-file edit check or required gate.
+Fix violations in the inputs/compiler and regenerate; never update inventory
+hashes to accept a handwritten patch.
 
 ## Security requirements for coding agents
 
@@ -108,3 +114,21 @@ uv run --locked --all-extras python scripts/utils/validate-httpx2-wheel.py
 ```
 
 Also run the scheduled compatibility matrix before release.
+
+## Large-payload compatibility
+
+Treat large payloads as a normal API contract, not evidence of malformed or
+hostile input. Responses, Chat Completions, and other APIs can legitimately
+return large `application/json` bodies and streaming events. Do not introduce
+arbitrary fixed limits on bodies, events, or lines as a security or efficiency
+fix. Prefer incremental processing, amortized-linear buffering, timely cleanup,
+and caller cancellation. Any new rejection limit needs an explicit,
+owner-approved API contract and a review of existing supported payloads and
+transports.
+
+Protect this behavior with focused, deterministic public-entrypoint tests using
+large synthetic payloads generated in memory, not committed captures or live
+image generation. Their high memory use is intentional: do not shrink the
+payloads or raise client limits to make the tests pass. Keep coverage to the main
+JSON and streaming categories, and run large cases sequentially to keep peak
+memory reasonable. The fixture size is a regression probe, not a new API maximum.

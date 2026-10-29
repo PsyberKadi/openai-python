@@ -307,7 +307,7 @@ ToolMcpToolRequireApproval: TypeAlias = Union[
 class ToolMcpTool(BaseModel):
     """
     Give the model access to additional tools via remote Model Context Protocol
-    (MCP) servers. [Learn more about MCP](https://platform.openai.com/docs/guides/tools-remote-mcp).
+    (MCP) servers. [Learn more about MCP](https://developers.openai.com/api/docs/guides/tools-connectors-mcp).
     """
 
     server_label: str
@@ -345,7 +345,11 @@ class ToolMcpTool(BaseModel):
 
     One of `server_url`, `connector_id`, or `tunnel_id` must be provided. Learn more
     about service connectors
-    [here](https://platform.openai.com/docs/guides/tools-remote-mcp#connectors).
+    [here](https://developers.openai.com/api/docs/guides/tools-connectors-mcp#connectors).
+
+    This field is deprecated for models released after September 1, 2026. Use
+    `server_url` to connect to a remote MCP server, or `tunnel_id` to connect
+    through a Secure MCP Tunnel.
 
     Currently supported `connector_id` values are:
 
@@ -488,7 +492,16 @@ class RealtimeSessionCreateResponse(BaseModel):
         ],
         None,
     ] = None
-    """The Realtime model used for this session."""
+    """The Realtime model used for this session.
+
+    Deprecated values:
+
+    - "gpt-realtime", "gpt-realtime-2025-08-28", "gpt-realtime-mini",
+      "gpt-realtime-mini-2025-12-15", "gpt-audio-mini", "gpt-audio-mini-2025-12-15":
+      Announced shutdown date: 2027-01-20. See
+      https://developers.openai.com/api/docs/deprecations for details and
+      recommended replacements.
+    """
 
     output_modalities: Optional[List[Literal["text", "audio"]]] = None
     """The set of modalities the model can respond with.
@@ -501,7 +514,7 @@ class RealtimeSessionCreateResponse(BaseModel):
     prompt: Optional[ResponsePrompt] = None
     """
     Reference to a prompt template and its variables.
-    [Learn more](https://platform.openai.com/docs/guides/text?api-mode=responses#reusable-prompts).
+    [Learn more](https://developers.openai.com/api/docs/guides/text?api-mode=responses#version-prompts-in-code).
     """
 
     reasoning: Optional[RealtimeReasoning] = None

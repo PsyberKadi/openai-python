@@ -12,36 +12,37 @@ from ._exceptions import WebSocketQueueFullError
 class SendQueue:
     """Bounded byte-size queue for outgoing WebSocket messages.
 
-    Messages are stored as pre-serialized strings. The queue enforces a
+    Messages retain their text or binary frame type. The queue enforces a
     maximum byte budget so that unbounded buffering cannot occur during
     reconnection windows.
     """
 
     def __init__(self, max_bytes: int = 1_048_576) -> None:
-        self._queue: list[tuple[str, int]] = []  # (data, byte_length)
+        self._queue: list[tuple[str | bytes, int]] = []  # (data, byte_length)
         self._bytes: int = 0
         self._max_bytes = max_bytes
         self._lock = threading.Lock()
         self._flush_done: threading.Event | None = None
 
-    def enqueue(self, data: str) -> None:
+    def enqueue(self, data: str | bytes) -> None:
         """Append *data* to the queue.
 
         Raises :class:`WebSocketQueueFullError` if the message would
         exceed the byte-size limit.
         """
-        byte_length = len(data.encode("utf-8"))
+        byte_length = len(data.encode("utf-8") if isinstance(data, str) else data)
         with self._lock:
             if self._bytes + byte_length > self._max_bytes:
                 raise WebSocketQueueFullError("send queue is full, message discarded")
             self._queue.append((data, byte_length))
             self._bytes += byte_length
 
-    def flush_sync(self, send: typing.Callable[[str], object]) -> None:
+    def flush_sync(self, send: typing.Callable[[str | bytes], object], *, requeue_failed: bool = True) -> None:
         """Send every queued message via *send*.
 
         If *send* raises, the failing message and all subsequent messages
-        are re-queued and the error is re-raised.
+        are re-queued and the error is re-raised. When `requeue_failed` is
+        false, release the attempted message even on failure or interruption.
         """
         while isinstance(pending := self._begin_flush(), threading.Event):
             pending.wait()
@@ -49,14 +50,21 @@ class SendQueue:
         try:
             while pending:
                 data, byte_length = pending[0]
-                send(data)
-                with self._lock:
-                    pending.popleft()
-                    self._bytes -= byte_length
+                sent = False
+                try:
+                    send(data)
+                    sent = True
+                finally:
+                    if sent or not requeue_failed:
+                        with self._lock:
+                            pending.popleft()
+                            self._bytes -= byte_length
         finally:
             self._end_flush(pending)
 
-    async def flush_async(self, send: typing.Callable[[str], typing.Awaitable[object]]) -> None:
+    async def flush_async(
+        self, send: typing.Callable[[str | bytes], typing.Awaitable[object]], *, requeue_failed: bool = True
+    ) -> None:
         """Async variant of :meth:`flush_sync`."""
         while isinstance(pending := self._begin_flush(), threading.Event):
             # Waiting in a worker keeps the event loop responsive. Cancellation
@@ -66,14 +74,19 @@ class SendQueue:
         try:
             while pending:
                 data, byte_length = pending[0]
-                await send(data)
-                with self._lock:
-                    pending.popleft()
-                    self._bytes -= byte_length
+                sent = False
+                try:
+                    await send(data)
+                    sent = True
+                finally:
+                    if sent or not requeue_failed:
+                        with self._lock:
+                            pending.popleft()
+                            self._bytes -= byte_length
         finally:
             self._end_flush(pending)
 
-    def _begin_flush(self) -> deque[tuple[str, int]] | threading.Event:
+    def _begin_flush(self) -> deque[tuple[str | bytes, int]] | threading.Event:
         with self._lock:
             if self._flush_done is not None:
                 return self._flush_done
@@ -83,14 +96,14 @@ class SendQueue:
             # Pending messages remain charged until their sends succeed.
             return pending
 
-    def _end_flush(self, pending: deque[tuple[str, int]]) -> None:
+    def _end_flush(self, pending: deque[tuple[str | bytes, int]]) -> None:
         with self._lock:
             self._queue = list(pending) + self._queue
             assert self._flush_done is not None
             self._flush_done.set()
             self._flush_done = None
 
-    def drain(self) -> list[str]:
+    def drain(self) -> list[str | bytes]:
         """Remove and return all queued messages."""
         with self._lock:
             items = [data for data, _ in self._queue]
